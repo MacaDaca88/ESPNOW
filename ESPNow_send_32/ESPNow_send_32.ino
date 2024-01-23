@@ -47,7 +47,7 @@ void setup() {
 void loop() {
   unsigned long currentMillis = millis();
   int ledState = 0;
-  bool _ledState = false;
+  bool _ledState = true;
 
 
   Serial.print("currentMillis : ");
