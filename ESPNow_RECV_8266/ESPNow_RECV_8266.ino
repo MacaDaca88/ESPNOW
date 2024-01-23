@@ -38,4 +38,5 @@ void setup() {
 
 void loop() {
   Serial.write(myData._ledState ? "on" : "off");
+  digitalWrite(LED_BUILTIN ,myData._ledState );
 }
