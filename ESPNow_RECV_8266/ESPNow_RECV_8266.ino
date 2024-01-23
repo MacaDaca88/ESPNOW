@@ -1,6 +1,6 @@
 #include <ESP8266WiFi.h>
 #include <espnow.h>
-
+#define LED 13
 typedef struct struct_message {
   char info[32];
   float _temp;
@@ -28,6 +28,7 @@ void OnDataRecv(uint8_t* mac, uint8_t* incomingData, uint8_t len) {
 void setup() {
   Serial.begin(115200);
   WiFi.mode(WIFI_STA);
+  pinMode(LED,OUTPUT);
   if (esp_now_init() != 0) {
     Serial.println("ERROR");
     ESP.restart();
@@ -38,5 +39,5 @@ void setup() {
 
 void loop() {
   Serial.write(myData._ledState ? "on" : "off");
-  digitalWrite(LED_BUILTIN ,myData._ledState );
+  digitalWrite(LED ,myData._ledState );
 }
