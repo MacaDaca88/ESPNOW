@@ -10,7 +10,7 @@ typedef struct struct_message {
 struct_message myData;
 
 void OnDataRecv(uint8_t* mac, uint8_t* incomingData, uint8_t len) {
-  memcpy(&myData, incomingData, sizeof(myData));
+  memcpy(&myData, incomingData, sizeof(myData));  // recall the incoming data to print
   Serial.print("bytes recived : ");
   Serial.println(len);
   Serial.print("Board : ");
@@ -19,19 +19,18 @@ void OnDataRecv(uint8_t* mac, uint8_t* incomingData, uint8_t len) {
   Serial.println(myData._temp);
   Serial.print("Led State : ");
   Serial.println(myData._ledState);
-  Serial.write(myData._ledState ? "on\n" : "off\n");
+  Serial.write(myData._ledState ? "on\n" : "off\n");  // print when lights on or off
+  Serial.println("      ");                           // creates a gap between transmissions
   Serial.println("      ");
-  Serial.println("      ");
-  digitalWrite(LED, myData._ledState ? 0:1);
-
+  digitalWrite(LED_BUILTIN, myData._ledState ? 1 : 0);  //set GPI02 ledState 1= on :  0= off
 }
 
 
 
 void setup() {
   Serial.begin(115200);
-  WiFi.mode(WIFI_STA);
-  pinMode(LED, OUTPUT);
+  WiFi.mode(WIFI_STA);           // set wifi in station mode
+  pinMode(LED_BUILTIN, OUTPUT);  // set pinMode for LED_BUILTIN OUTPUT
   if (esp_now_init() != 0) {
     Serial.println("ERROR");
     ESP.restart();

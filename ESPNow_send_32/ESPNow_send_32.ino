@@ -17,6 +17,7 @@ typedef struct struct_message {  // struct to hold variables to send
 } struct_message;
 
 struct_message myData;
+
 esp_now_peer_info_t peerInfo;  // variable to hold mac/channel info to connect
 
 
@@ -42,6 +43,7 @@ void setup() {
 
   if (esp_now_add_peer(&peerInfo) != ESP_OK) {
     Serial.println("Failed to connect to Peer");
+    delay(5000;)
     ESP.restart();
   }
   pinMode(LED_BUILTIN, OUTPUT);

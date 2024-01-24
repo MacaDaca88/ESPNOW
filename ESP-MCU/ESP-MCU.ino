@@ -1,7 +1,9 @@
-
-
 String incomingString;
+typedef struct struct_message {
+  bool _ledState;
+} struct_message;
 
+struct_message myData;
 
 void setup() {
   Serial.begin(115200);
@@ -16,15 +18,21 @@ void setup() {
 }
 
 void loop() {
-
   while (Serial.available()) {
     incomingString = Serial.readString();
+    
     if (incomingString.equals("on")) {
-      Serial.println("on");
-      digitalWrite(LED_BUILTIN, 1);
+      myData._ledState = true;
     } else {
-      Serial.println("off");
-      digitalWrite(LED_BUILTIN, 0);
+      myData._ledState = false;
+    }
+
+    if (myData._ledState) {
+      Serial.println("Received LED State: ON");
+      digitalWrite(LED_BUILTIN, HIGH);  // Turn the LED on
+    } else {
+      Serial.println("Received LED State: OFF");
+      digitalWrite(LED_BUILTIN, LOW);  // Turn the LED off
     }
   }
 }
