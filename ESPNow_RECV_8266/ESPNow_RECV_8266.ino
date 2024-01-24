@@ -19,8 +19,11 @@ void OnDataRecv(uint8_t* mac, uint8_t* incomingData, uint8_t len) {
   Serial.println(myData._temp);
   Serial.print("Led State : ");
   Serial.println(myData._ledState);
+  Serial.write(myData._ledState ? "on\n" : "off\n");
   Serial.println("      ");
   Serial.println("      ");
+  digitalWrite(LED, myData._ledState ? 0:1);
+
 }
 
 
@@ -28,7 +31,7 @@ void OnDataRecv(uint8_t* mac, uint8_t* incomingData, uint8_t len) {
 void setup() {
   Serial.begin(115200);
   WiFi.mode(WIFI_STA);
-  pinMode(LED,OUTPUT);
+  pinMode(LED, OUTPUT);
   if (esp_now_init() != 0) {
     Serial.println("ERROR");
     ESP.restart();
@@ -38,6 +41,4 @@ void setup() {
 }
 
 void loop() {
-  Serial.write(myData._ledState ? "on" : "off");
-  digitalWrite(LED ,myData._ledState );
 }
