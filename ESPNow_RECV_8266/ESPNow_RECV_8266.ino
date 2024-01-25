@@ -5,11 +5,22 @@ typedef struct struct_message {
   char info[32];
   float _temp;
   bool _ledState;
+  bool _trigger1;
 } struct_message;
 
 struct_message myData;
 
+struct_message board1;
+struct_message board2;
+
+struct_message boardsStruct[3];
+
 void OnDataRecv(uint8_t* mac, uint8_t* incomingData, uint8_t len) {
+  char macAddr[18];
+  Serial.print("Packet Recived From : ");
+  snprintf(macAddr, sizeof(macAddr), "%02x:%02x:%02x:%02x:%02x:%02x",
+           mac[0], mac[0], mac[0], mac[0], mac[0], mac[0]);
+  Serial.println(macAddr);
   memcpy(&myData, incomingData, sizeof(myData));  // recall the incoming data to print
   Serial.print("bytes recived : ");
   Serial.println(len);
@@ -20,7 +31,9 @@ void OnDataRecv(uint8_t* mac, uint8_t* incomingData, uint8_t len) {
   Serial.print("Led State : ");
   Serial.println(myData._ledState);
   Serial.write(myData._ledState ? "on\n" : "off\n");  // print when lights on or off
-  Serial.println("      ");                           // creates a gap between transmissions
+  Serial.print("Trigger State : ");
+  Serial.println(myData._trigger1);
+  Serial.println("      ");  // creates a gap between transmissions
   Serial.println("      ");
   digitalWrite(LED_BUILTIN, myData._ledState ? 1 : 0);  //set GPI02 ledState 1= on :  0= off
 }
