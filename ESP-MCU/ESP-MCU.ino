@@ -20,19 +20,18 @@ void setup() {
 void loop() {
   while (Serial.available()) {
     incomingString = Serial.readString();
-    
-    if (incomingString.equals("on")) {
+    Serial.println(incomingString);
+    if (incomingString.equals("on\n")) {
       myData._ledState = true;
-    } else {
+    } else if (incomingString.equals("off\n")) {
       myData._ledState = false;
     }
 
-    if (myData._ledState) {
+    if (myData._ledState == true) {
       Serial.println("Received LED State: ON");
-      digitalWrite(LED_BUILTIN, HIGH);  // Turn the LED on
+      digitalWrite(LED_BUILTIN, myData._ledState ? 1 : 0);  // Turn the LED on
     } else {
       Serial.println("Received LED State: OFF");
-      digitalWrite(LED_BUILTIN, LOW);  // Turn the LED off
     }
   }
 }

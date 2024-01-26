@@ -1,5 +1,8 @@
 #include <ESP8266WiFi.h>
 #include <espnow.h>
+#include <SoftwareSerial.h>
+
+SoftwareSerial mySerial(3, 4);  //rx, tx
 
 uint8_t broadcastAddress[] = { 0x98, 0xCD, 0xAC, 0x31, 0x59, 0xBC };  // Mac address for reciver board
 bool trigger1 = false;
@@ -29,9 +32,11 @@ void OnDataSent(uint8_t *mac_addr, uint8_t sendStatus) {
 
 
 void setup() {
-
+  pinMode(3, INPUT);
+  pinMode(4, OUTPUT);
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, 1);
+  mySerial.begin(115200);
   // Init Serial Monitor
   Serial.begin(115200);
   delay(50);
@@ -41,6 +46,7 @@ void setup() {
   if (esp_now_init() != 0) {
     // Init ESP-NOW
     Serial.println("Error initializing ESP-NOW");
+    ESP.restart();
   }
   return;
   Serial.println(" ESP-NOW connected");
@@ -55,16 +61,16 @@ void setup() {
 }
 
 void loop() {
-  if (Serial.available()) {
+  while (Serial.available()) {
     rx = Serial.read();
     Serial.print(rx);
+
 
     if ((millis() - lastTime) > timerDelay) {
       // Set values to send
       strcpy(myData.info, "Trigger1");
       myData._trigger1 = (1, 0);
-
-
+      mySerial.write(1);
       // Send message via ESP-NOW
       esp_now_send(broadcastAddress, (uint8_t *)&myData, sizeof(myData));
 
